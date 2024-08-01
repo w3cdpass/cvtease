@@ -28,8 +28,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pip install pytest
-          pytest
+          python -m unittest discover
       - name: Build package
         run: |
             python -m pip install --upgrade build
