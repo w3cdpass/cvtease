@@ -1,4 +1,3 @@
 click==8.1.7
 colorama==0.4.6
--e git+https://github.com/w3cdpass/funny-face.git@b310746bd8600caa69014903ad9481a3e8b24b4f#egg=funny_face
 setuptools

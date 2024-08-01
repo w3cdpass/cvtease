@@ -19,7 +19,7 @@ setup(
     description='A CLI tool for computer vision that is under development. Includes a space shooter game using ASCII art.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/w3cdpass/funny-face',
+    url='https://github.com/w3cdpass/cvtease',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',

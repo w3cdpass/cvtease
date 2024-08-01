@@ -25,8 +25,8 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/w3cdpass/funny-face"
-"Bug Tracker" = "https://github.com/w3cdpass/funny-face/issues"
+"Homepage" = "https://github.com/w3cdpass/cvtease"
+"Bug Tracker" = "https://github.com/w3cdpass/cvtease/issues"
 
 [project.scripts]
 cvtease = "funny_face.cli:main"

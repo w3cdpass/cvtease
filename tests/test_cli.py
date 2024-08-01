@@ -1,7 +1,7 @@
 # Simple test case for the CLI
 def test_main():
     from click.testing import CliRunner
-    from funny_face.cli import main
+    from cvtease.cli import main
 
     runner = CliRunner()
     result = runner.invoke(main)
