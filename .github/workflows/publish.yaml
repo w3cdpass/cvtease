@@ -40,7 +40,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
         with:
             user: __token__
-            password: ${{ secrets.PYPI_API_TOKEN }}
+            password: ${{ secrets.token_api }}
             repository_url: https://upload.pypi.org/legacy/
         env:
           pythonLocation: /opt/hostedtoolcache/Python/3.12.4/x64
