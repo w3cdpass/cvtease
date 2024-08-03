@@ -29,4 +29,4 @@ classifiers = [
 "Bug Tracker" = "https://github.com/w3cdpass/cvtease/issues"
 
 [project.scripts]
-cvtease = "funny_face.cli:main"
+cvtease = "cvtease.cli:main"
