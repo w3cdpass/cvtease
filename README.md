@@ -1,9 +1,6 @@
-# Funny Face
+# cvtease
 
-A CLI tool for computer vision that is under development. Includes a space shooter game using ASCII art.
-
-## Installation
-
-```sh
-pip install funny-face
-# funny-face
+### Click to the image to read the .md file.
+<a href="https://github.com/w3cdpass/cvtease/blob/main/MD/decent_facial_landmark_detection.md">
+    <img src="md/josh2.png" alt="Processed Image" width="250" height="200" />
+</a>
