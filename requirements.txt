@@ -4,7 +4,6 @@ cffi==1.16.0
 click==8.1.7
 colorama==0.4.6
 contourpy==1.2.1
--e git+https://github.com/w3cdpass/cvtease.git@d8d17bee654d0b6e63d3334a9f4eb0cd573028d5#egg=cvtease
 cycler==0.12.1
 dlib==19.24.5
 flatbuffers==24.3.25
