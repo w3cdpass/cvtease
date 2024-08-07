@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cvtease"
+version = "0.1.1"
+description = "A CLI tool for computer vision that is under development. Includes a space shooter game using ASCII art."
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = ["click", "colorama", "mediapipe", "pyside"]
+license = { file = "LICENSE" }
+authors = [
+    { name = "w3cdpass", email = "kupasva663@gmail.com" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/w3cdpass/cvtease"
+"Bug Tracker" = "https://github.com/w3cdpass/cvtease/issues"
+
+[project.scripts]
+cvtease = "cvtease.cli:main"
