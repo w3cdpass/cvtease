@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cvtease"
-version = "0.1.1"
+version = "0.1.2"
 description = "A CLI tool for computer vision that is under development. Includes a space shooter game using ASCII art."
 readme = "README.md"
 requires-python = ">=3.7"
-dependencies = ["click", "colorama", "mediapipe", "pyside"]
+dependencies = ["click", "colorama", "mediapipe", "PySide"]
 license = { file = "LICENSE" }
 authors = [
     { name = "w3cdpass", email = "kupasva663@gmail.com" }
