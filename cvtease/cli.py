@@ -20,7 +20,8 @@ def main(gui, game, access_camera, facial_keypoints):
     elif access_camera:
         open_camera(facial_keypoints)
     else:
-        print("This tool is under development, so be patient.")
+        click.echo(click.get_current_context().get_help())
+        click.echo("This tool is under development, so be patient.")
 
 if __name__ == '__main__':
     main()
