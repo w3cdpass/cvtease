@@ -5,7 +5,7 @@ click==8.1.7
 colorama==0.4.6
 contourpy==1.2.1
 cycler==0.12.1
-dlib==19.24.5
+
 flatbuffers==24.3.25
 fonttools==4.53.1
 jax==0.4.31
