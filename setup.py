@@ -6,15 +6,14 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='cvtease',
-    version='0.1.3',
+    version='0.1.4',
     packages=find_packages(),
     install_requires=[
         'click',
         'colorama',
         'opencv-python',
         'mediapipe',
-        'PySide',
-        
+        'PySide6',  # Ensure compatibility with Python 3.7+
     ],
     entry_points={
         'console_scripts': [
