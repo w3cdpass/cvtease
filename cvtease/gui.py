@@ -1,12 +1,13 @@
 import sys
+import os
 import cv2
 import mediapipe as mp
-import numpy as np
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QSlider, QHBoxLayout, QComboBox
+    QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QSlider, QComboBox
 )
 from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtCore import QTimer, Qt
+from PySide6.QtCore import QTimer, Qt, QDir, QUrl
+from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 
 class FaceDetectionApp(QMainWindow):
     def __init__(self):
@@ -34,8 +35,17 @@ class FaceDetectionApp(QMainWindow):
         self.stop_button = QPushButton("Stop Camera", self)
         self.stop_button.clicked.connect(self.stop_camera)
 
+        self.capture_button = QPushButton("Capture Photo", self)
+        self.capture_button.clicked.connect(self.capture_photo)
+
+        # Load the capture sound using QMediaPlayer
+        self.media_player = QMediaPlayer()
+        self.audio_output = QAudioOutput()
+        self.media_player.setAudioOutput(self.audio_output)
+        self.media_player.setSource(QUrl.fromLocalFile("cvtease/asset/photoCapture.wav"))  # Update the path to your sound file
+
         # Settings Panel
-        self.settings_panel = QWidget()
+        self.settings_panel = QWidget() 
         self.settings_layout = QVBoxLayout()
 
         self.slider_detection = QSlider(Qt.Horizontal)
@@ -67,6 +77,7 @@ class FaceDetectionApp(QMainWindow):
         layout.addWidget(self.image_label)
         layout.addWidget(self.start_button)
         layout.addWidget(self.stop_button)
+        layout.addWidget(self.capture_button)  # Add the capture photo button
         layout.addWidget(self.settings_panel)
         layout.addWidget(self.dev_label)  # Add the development label
 
@@ -126,6 +137,28 @@ class FaceDetectionApp(QMainWindow):
             return mp.solutions.face_mesh.FACEMESH_CONTOURS
         elif index == 2:
             return mp.solutions.face_mesh.FACEMESH_IRISES
+
+    def capture_photo(self):
+        # Capture a fresh frame to avoid blurriness
+        ret, frame = self.capture.read()
+        if not ret:
+            print("Failed to capture frame")
+            return
+
+        # Convert the frame to RGB to match display
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        # Play the capture sound
+        self.media_player.play()
+
+        # Save to the user's Downloads directory
+        downloads_path = os.path.join(QDir.homePath(), "Downloads")
+        if not os.path.exists(downloads_path):
+            os.makedirs(downloads_path)
+        photo_path = os.path.join(downloads_path, "captured_photo.jpg")
+
+        cv2.imwrite(photo_path, frame_rgb)
+        print(f"Photo captured and saved as {photo_path}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
