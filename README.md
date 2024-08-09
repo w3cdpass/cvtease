@@ -1,4 +1,13 @@
 # cvtease
+## ⭐ Support This Project
+
+If you like this project and want to support it, please consider giving it a star! 💖
+
+[![Star on GitHub](https://img.shields.io/github/stars/w3cdpass/cvtease)](https://github.com/w3cdpass/cvtease)
+
+![Downloads](https://img.shields.io/pypi/dm/cvtease)
+
+
 
 ### Follow the link to read the .md file.
 <a href="https://github.com/w3cdpass/cvtease/blob/main/MD/decent_facial_landmark_detection.md">
