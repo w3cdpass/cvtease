@@ -5,7 +5,7 @@ with open("README.md", encoding="utf-8") as f:
     long_description = f.read()
 setup(
     name='cvtease',
-    version='0.1.12',
+    version='0.1.13',
     packages=find_packages(),
     install_requires=[
         'click',

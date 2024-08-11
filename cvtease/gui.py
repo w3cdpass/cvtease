@@ -10,7 +10,7 @@ from PySide6.QtGui import QImage, QPixmap, QIcon
 from PySide6.QtCore import QTimer, QDir, QUrl
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from cvtease.style import style
-from .function.eyeAft import apply_glasses
+from function.eyeAft import apply_glasses
 
 def apply_app_icon(app, icon_path):
     icon = QIcon(icon_path)
