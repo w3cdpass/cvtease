@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cvtease"
-version = "0.1.7"
+version = "0.1.8"
 description = "A CLI tool for computer vision that is under development. Includes a space shooter game using ASCII art."
 readme = "README.md"
 requires-python = ">=3.7"

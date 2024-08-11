@@ -1,20 +1,32 @@
+import json
 import sys
 import os
 import cv2
 import mediapipe as mp
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QSlider, QComboBox
+    QHBoxLayout, QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QSlider, QComboBox
 )
-from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtCore import QTimer, Qt, QDir, QUrl
+from PySide6.QtGui import QImage, QPixmap, QIcon
+from PySide6.QtCore import QTimer, QDir, QUrl
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
+import cvtease.style.style as style
+from .function.eyeAft import apply_glasses
+
+def apply_app_icon(app, icon_path):
+    icon = QIcon(icon_path)
+    app.setWindowIcon(icon)
 
 class FaceDetectionApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Face Detection App")
-        self.setGeometry(100, 100, 800, 600)
+        self.setWindowTitle(style.WINDOW_TITLE)
+        self.setGeometry(*style.WINDOW_GEOMETRY)
+        self.setWindowIcon(QIcon("cvtease/asset/laugh.ico"))
 
+        self.switch_button = QPushButton("Switch Glasses", self)
+        self.switch_button.setStyleSheet(style.ROUND_BUTTON_STYLE)
+        self.switch_button.clicked.connect(self.switch_glasses)
+        
         self.face_mesh = mp.solutions.face_mesh.FaceMesh(
             max_num_faces=1, refine_landmarks=True,
             min_detection_confidence=0.5, min_tracking_confidence=0.5)
@@ -27,59 +39,75 @@ class FaceDetectionApp(QMainWindow):
         self.timer.start(30)
 
         self.image_label = QLabel(self)
-        self.image_label.setAlignment(Qt.AlignCenter)
+        self.image_label.setAlignment(style.IMAGE_LABEL_ALIGNMENT)
 
+        # Create and style buttons
         self.start_button = QPushButton("Start Camera", self)
+        self.start_button.setStyleSheet(style.ROUND_BUTTON_STYLE)
         self.start_button.clicked.connect(self.start_camera)
 
+        self.capture_button = QPushButton("Capture Photo", self)
+        self.capture_button.setStyleSheet(style.ROUND_BUTTON_STYLE)
+        self.capture_button.clicked.connect(self.capture_photo)
+
         self.stop_button = QPushButton("Stop Camera", self)
+        self.stop_button.setStyleSheet(style.ROUND_BUTTON_STYLE)
         self.stop_button.clicked.connect(self.stop_camera)
 
-        self.capture_button = QPushButton("Capture Photo", self)
-        self.capture_button.clicked.connect(self.capture_photo)
+        # Create a horizontal layout for the buttons
+        self.button_layout = QHBoxLayout()
+        self.button_layout.addWidget(self.start_button)
+        self.button_layout.addWidget(self.capture_button)
+        self.button_layout.addWidget(self.stop_button)
 
         # Load the capture sound using QMediaPlayer
         self.media_player = QMediaPlayer()
         self.audio_output = QAudioOutput()
         self.media_player.setAudioOutput(self.audio_output)
-        self.media_player.setSource(QUrl.fromLocalFile("cvtease/asset/photoCapture.wav"))  # Update the path to your sound file
+        self.media_player.setSource(QUrl.fromLocalFile("cvtease/asset/photoCapture.wav"))
 
         # Settings Panel
-        self.settings_panel = QWidget() 
+        self.settings_panel = QWidget()
         self.settings_layout = QVBoxLayout()
 
-        self.slider_detection = QSlider(Qt.Horizontal)
-        self.slider_detection.setRange(0, 100)
-        self.slider_detection.setValue(50)
-        self.slider_detection.setTickInterval(10)
+        self.slider_detection = QSlider(style.SLIDER_TICK_POSITION)
+        self.slider_detection.setRange(*style.SLIDER_RANGE)
+        self.slider_detection.setValue(style.SLIDER_DEFAULT_VALUE)
+        self.slider_detection.setTickInterval(style.SLIDER_TICK_INTERVAL)
         self.slider_detection.setTickPosition(QSlider.TicksBelow)
+        self.slider_detection.setStyleSheet(style.SLIDER_STYLE)
         self.slider_detection.valueChanged.connect(self.update_detection_confidence)
 
-        self.label_detection = QLabel("Detection Confidence: 0.5")
-        self.settings_layout.addWidget(self.label_detection)
-        self.settings_layout.addWidget(self.slider_detection)
+        with open('cvtease/database/eyeAftjson.json', 'r') as file:
+            data = json.load(file)
+        self.glasses_paths = data['images']
+        self.glasses_index = 0
+        self.current_glasses_path = self.glasses_paths[self.glasses_index]
 
         self.combo_box_connections = QComboBox()
-        self.combo_box_connections.addItem("Tesselation")
-        self.combo_box_connections.addItem("Contours")
-        self.combo_box_connections.addItem("Iris")
+        self.combo_box_connections.addItems(style.COMBO_BOX_ITEMS)
+        self.combo_box_connections.setStyleSheet(style.COMBO_BOX_STYLE)
         self.combo_box_connections.currentIndexChanged.connect(self.update_connections)
 
         self.settings_layout.addWidget(self.combo_box_connections)
         self.settings_panel.setLayout(self.settings_layout)
 
-        # Under Development Label
-        self.dev_label = QLabel("This tool is under development. Please be patient.", self)
-        self.dev_label.setAlignment(Qt.AlignCenter)
-        self.dev_label.setStyleSheet("color: red; font-weight: bold;")
+        self.label_detection = QLabel(f"Detection Confidence: 0.5")
+        self.settings_layout.addWidget(self.label_detection)
+        self.settings_layout.addWidget(self.slider_detection)
 
+        # Under Development Label
+        self.dev_label = QLabel(style.DEV_LABEL_STYLE, self)
+        self.dev_label.setAlignment(style.IMAGE_LABEL_ALIGNMENT)
+        self.dev_label.setStyleSheet(style.DEV_LABEL_STYLE)
+
+        # Create and set the layout
         layout = QVBoxLayout()
         layout.addWidget(self.image_label)
-        layout.addWidget(self.start_button)
-        layout.addWidget(self.stop_button)
-        layout.addWidget(self.capture_button)  # Add the capture photo button
+        layout.addLayout(self.button_layout)  # Use the horizontal layout
         layout.addWidget(self.settings_panel)
-        layout.addWidget(self.dev_label)  # Add the development label
+        layout.addWidget(self.dev_label)
+        layout.addWidget(self.switch_button)  # Add the switch button
 
         container = QWidget()
         container.setLayout(layout)
@@ -111,13 +139,16 @@ class FaceDetectionApp(QMainWindow):
 
     def draw_face_landmarks(self, image, face_landmarks):
         connections = self.get_connections_from_combo()
-        self.mp_drawing.draw_landmarks(
-            image=image,
-            landmark_list=face_landmarks,
-            connections=connections,
-            landmark_drawing_spec=None,
-            connection_drawing_spec=self.mp_drawing_styles
-            .get_default_face_mesh_tesselation_style())
+        if connections == mp.solutions.face_mesh.FACEMESH_IRISES:
+            apply_glasses(image, face_landmarks.landmark)
+        else:
+            self.mp_drawing.draw_landmarks(
+                image=image,
+                landmark_list=face_landmarks,
+                connections=connections,
+                landmark_drawing_spec=None,
+                connection_drawing_spec=self.mp_drawing_styles
+                .get_default_face_mesh_tesselation_style())
 
     def update_detection_confidence(self, value):
         confidence = value / 100.0
@@ -139,19 +170,14 @@ class FaceDetectionApp(QMainWindow):
             return mp.solutions.face_mesh.FACEMESH_IRISES
 
     def capture_photo(self):
-        # Capture a fresh frame to avoid blurriness
         ret, frame = self.capture.read()
         if not ret:
             print("Failed to capture frame")
             return
 
-        # Convert the frame to RGB to match display
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-        # Play the capture sound
         self.media_player.play()
 
-        # Save to the user's Downloads directory
         downloads_path = os.path.join(QDir.homePath(), "Downloads")
         if not os.path.exists(downloads_path):
             os.makedirs(downloads_path)
@@ -160,8 +186,20 @@ class FaceDetectionApp(QMainWindow):
         cv2.imwrite(photo_path, frame_rgb)
         print(f"Photo captured and saved as {photo_path}")
 
+    def switch_glasses(self):
+        # Logic to switch between different PNGs
+        self.glasses_index = (self.glasses_index + 1) % len(self.glasses_paths)
+        self.current_glasses_path = self.glasses_paths[self.glasses_index]
+        print(f"Switched to {self.current_glasses_path}")
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    
+    # Apply the icon to the application
+    apply_app_icon(app, "cvtease/asset/laugh.ico")
+    
     window = FaceDetectionApp()
     window.show()
+    
     sys.exit(app.exec())
