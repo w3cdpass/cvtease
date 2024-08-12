@@ -3,21 +3,25 @@ from pathlib import Path
 
 with open("README.md", encoding="utf-8") as f:
     long_description = f.read()
+
+# Adding the `install.sh` script to the package data
 setup(
     name='cvtease',
-    version='0.1.13',
+    version='0.1.14',
     packages=find_packages(),
     install_requires=[
         'click',
         'colorama',
         'opencv-python',
-        'mediapipe',
-        'PySide6',  # Ensure compatibility with Python 3.7+
     ],
     entry_points={
         'console_scripts': [
             'cvtease=cvtease.cli:main',
         ],
+    },
+    include_package_data=True,  # Include package data files
+    package_data={
+        '': ['install.sh'],  # Include `install.sh` in the package
     },
     author='w3cdpass',
     author_email='kupasva663@gmail.com',
