@@ -1,21 +1,27 @@
-import json
 import cv2
 import mediapipe as mp
 import numpy as np
 import math
 
-# Load the PNG file paths from JSON
-with open('cvtease/database/eyeAftjson.json', 'r') as file:
-    data = json.load(file)
-glasses_paths = data['images']
+# Define the direct paths to the images
+glasses_paths = [
+    "cvtease/asset/pngfind.com-aviators-png-105839.png",
+    "cvtease/asset/Glasses_Clipart_Image.png",
+    "cvtease/asset/glasses.png",
+    "cvtease/asset/glasses2.png",
+    "cvtease/asset/pngfind.com-oval-png-494907.png",
+    "cvtease/asset/pngfind.com-images-branding-googlelogo-2x-176540.png"
+]
 
-mp_drawing = mp.solutions.drawing_utils
-mp_face_mesh = mp.solutions.face_mesh
+# Load the default glasses image
 current_glasses_img = cv2.imread(glasses_paths[0], cv2.IMREAD_UNCHANGED)
 
-def load_glasses_image(path):
+def load_glasses_image(index):
     global current_glasses_img
-    current_glasses_img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+    if 0 <= index < len(glasses_paths):
+        current_glasses_img = cv2.imread(glasses_paths[index], cv2.IMREAD_UNCHANGED)
+    else:
+        raise ValueError("Invalid index for glasses image")
 
 def overlay_image_alpha(img, img_overlay, pos, alpha_mask):
     x, y = pos
