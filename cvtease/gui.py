@@ -78,11 +78,11 @@ class FaceDetectionApp(QMainWindow):
         self.slider_detection.setStyleSheet(style.SLIDER_STYLE)
         self.slider_detection.valueChanged.connect(self.update_detection_confidence)
 
-        with open('cvtease/database/eyeAftjson.json', 'r') as file:
-            data = json.load(file)
-        self.glasses_paths = data['images']
-        self.glasses_index = 0
-        self.current_glasses_path = self.glasses_paths[self.glasses_index]
+        # with open('cvtease/database/eyeAftjson.json', 'r') as file:
+        #     data = json.load(file)
+        # self.glasses_paths = data['images']
+        # self.glasses_index = 0
+        # self.current_glasses_path = self.glasses_paths[self.glasses_index]
 
         self.combo_box_connections = QComboBox()
         self.combo_box_connections.addItems(style.COMBO_BOX_ITEMS)
