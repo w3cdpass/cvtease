@@ -28,9 +28,6 @@ classifiers = [
 "Homepage" = "https://github.com/w3cdpass/cvtease"
 "Bug Tracker" = "https://github.com/w3cdpass/cvtease/issues"
 
-[tool.setuptools.package-data]
-"* = ['install.sh']"
-
 [project.scripts]
 cvtease = "cvtease.cli:main"
 
