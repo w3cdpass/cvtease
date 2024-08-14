@@ -10,7 +10,8 @@ from PySide6.QtGui import QImage, QPixmap, QIcon
 from PySide6.QtCore import QTimer, QDir, QUrl
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from cvtease.style import style
-from .function.eyeAft import apply_glasses
+from .function.eyeAft import apply_glasses, load_glasses_image
+
 
 def apply_app_icon(app, icon_path):
     icon = QIcon(icon_path)
@@ -78,11 +79,12 @@ class FaceDetectionApp(QMainWindow):
         self.slider_detection.setStyleSheet(style.SLIDER_STYLE)
         self.slider_detection.valueChanged.connect(self.update_detection_confidence)
 
-        # with open('cvtease/database/eyeAftjson.json', 'r') as file:
-        #     data = json.load(file)
-        # self.glasses_paths = data['images']
-        # self.glasses_index = 0
-        # self.current_glasses_path = self.glasses_paths[self.glasses_index]
+        # Initialize the glasses index and paths
+        with open('cvtease/database/eyeAftjson.json', 'r') as file:
+            data = json.load(file)
+        self.glasses_paths = data['images']
+        self.glasses_index = 0
+        self.current_glasses_path = self.glasses_paths[self.glasses_index]
 
         self.combo_box_connections = QComboBox()
         self.combo_box_connections.addItems(style.COMBO_BOX_ITEMS)
@@ -140,7 +142,7 @@ class FaceDetectionApp(QMainWindow):
     def draw_face_landmarks(self, image, face_landmarks):
         connections = self.get_connections_from_combo()
         if connections == mp.solutions.face_mesh.FACEMESH_IRISES:
-            apply_glasses(image, face_landmarks.landmark)
+            apply_glasses(image, face_landmarks.landmark, self.current_glasses_path)
         else:
             self.mp_drawing.draw_landmarks(
                 image=image,
@@ -149,6 +151,7 @@ class FaceDetectionApp(QMainWindow):
                 landmark_drawing_spec=None,
                 connection_drawing_spec=self.mp_drawing_styles
                 .get_default_face_mesh_tesselation_style())
+
 
     def update_detection_confidence(self, value):
         confidence = value / 100.0
@@ -187,11 +190,18 @@ class FaceDetectionApp(QMainWindow):
         print(f"Photo captured and saved as {photo_path}")
 
     def switch_glasses(self):
-        # Logic to switch between different PNGs
+        # Increment the index and loop back to 0 if it exceeds the length
         self.glasses_index = (self.glasses_index + 1) % len(self.glasses_paths)
-        self.current_glasses_path = self.glasses_paths[self.glasses_index]
-        print(f"Switched to {self.current_glasses_path}")
+        
+        # Load the new glasses image using the correct function
+        load_glasses_image(self.glasses_index)
+        
+        # Force the frame to update with the new glasses
+        self.update_frame()
 
+        print(f"Switched to {self.glasses_paths[self.glasses_index]}")  # Force the frame to update
+
+        
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

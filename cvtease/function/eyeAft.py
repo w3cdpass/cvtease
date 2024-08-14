@@ -1,5 +1,4 @@
 import cv2
-import mediapipe as mp
 import numpy as np
 import math
 
@@ -20,6 +19,10 @@ def load_glasses_image(index):
     global current_glasses_img
     if 0 <= index < len(glasses_paths):
         current_glasses_img = cv2.imread(glasses_paths[index], cv2.IMREAD_UNCHANGED)
+        if current_glasses_img is None:
+            print(f"Failed to load image from {glasses_paths[index]}")
+        else:
+            print(f"Loaded glasses image from {glasses_paths[index]}")
     else:
         raise ValueError("Invalid index for glasses image")
 
@@ -38,9 +41,15 @@ def overlay_image_alpha(img, img_overlay, pos, alpha_mask):
     alpha = alpha_mask[y1o:y2o, x1o:x2o, np.newaxis] / 255.0
     img[y1:y2, x1:x2] = (1.0 - alpha) * img[y1:y2, x1:x2] + alpha * img_overlay[y1o:y2o, x1o:x2o]
 
-def apply_glasses(image, landmarks):
+def apply_glasses(image, landmarks, glasses_path):
     left_eye = landmarks[33]
     right_eye = landmarks[263]
+    # print(f"Applying glasses from: {glasses_path}")
+    glasses_img = cv2.imread(glasses_path, cv2.IMREAD_UNCHANGED)
+    # if glasses_img is None:
+    #     print("Failed to load glasses image.")
+    # else:
+    #     print("Glasses image loaded successfully.")
     glasses_width = int(math.dist([left_eye.x, left_eye.y], [right_eye.x, right_eye.y]) * image.shape[1] * 1.5)
     glasses_height = int(glasses_width * current_glasses_img.shape[0] / current_glasses_img.shape[1])
 

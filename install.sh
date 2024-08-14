@@ -2,7 +2,7 @@
 
 # Define package names
 PROJECT_NAME="cvtease"
-MAIN_PACKAGES=("click" "colorama" "opencv-python")
+MAIN_PACKAGES=("click" "colorama" "opencv-python" "opencv-python-headless")
 SEPARATE_PACKAGES=("mediapipe" "PySide6")
 
 # Function to check if a package is installed
