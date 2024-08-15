@@ -7,7 +7,7 @@ with open("README.md", encoding="utf-8") as f:
 # Adding the `install.sh` script to the package data
 setup(
     name='cvtease',
-    version='0.1.17',
+    version='0.1.18',
     packages=find_packages(),
     install_requires=[
         'click',

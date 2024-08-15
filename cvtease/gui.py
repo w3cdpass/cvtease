@@ -78,9 +78,9 @@ class FaceDetectionApp(QMainWindow):
         self.slider_detection.setTickPosition(QSlider.TicksBelow)
         self.slider_detection.setStyleSheet(style.SLIDER_STYLE)
         self.slider_detection.valueChanged.connect(self.update_detection_confidence)
-
+        
         # Initialize the glasses index and paths
-        with open('cvtease/database/eyeAftjson.json', 'r') as file:
+        with open('cvtease/data/eyeAftjson.json', 'r', encoding="utf8") as file:
             data = json.load(file)
         self.glasses_paths = data['images']
         self.glasses_index = 0
