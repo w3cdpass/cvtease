@@ -17,6 +17,10 @@ If you like this project and want to support it, please consider giving it a sta
 [![MediaPipe](https://img.shields.io/badge/MediaPipe-blue?logo=mediapipe)](https://mediapipe.dev/)
 [![PySide6](https://img.shields.io/badge/PySide6-darkgreen?logo=qt)](https://pyside.org/)
 
+***
+
+###### 🧪NOT TESTED
+![Not Tested](https://img.shields.io/badge/Not_Tested-Linux%20%26%20macOS-red)
 ****
 [![PyPI version](https://img.shields.io/badge/pip%20install-cvtease-blue)](https://pypi.org/project/cvtease/)
 ![Python Version](https://img.shields.io/pypi/pyversions/cvtease)
